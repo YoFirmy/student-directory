@@ -30,9 +30,18 @@ def print(students)
 end
 
 def print_beginning_with(students, letter)
-  puts "students beginning with #{letter}"
+  puts "students beginning with #{letter}:"
   students.each do |student|
     if student[:name][0].upcase == letter
+      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    end
+  end
+end
+
+def print_shorter_than_twelve(students)
+  puts "students with names shorter than 12 characters long:"
+  students.each do |student|
+    if student[:name].length < 12
       puts "#{student[:name]} (#{student[:cohort]} cohort)"
     end
   end
@@ -45,5 +54,5 @@ end
 # nothing happens until we call the methods
 students = input_students
 print_header
-print_beginning_with(students, "D")
+print_shorter_than_twelve(students)
 print_footer(students)
