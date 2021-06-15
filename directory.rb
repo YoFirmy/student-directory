@@ -29,6 +29,15 @@ def print(students)
   end
 end
 
+def print_beginning_with(students, letter)
+  puts "students beginning with #{letter}"
+  students.each do |student|
+    if student[:name][0].upcase == letter
+      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    end
+  end
+end
+
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
@@ -36,5 +45,5 @@ end
 # nothing happens until we call the methods
 students = input_students
 print_header
-print(students)
+print_beginning_with(students, "D")
 print_footer(students)
