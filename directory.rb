@@ -6,8 +6,12 @@ def input_students
   while !name.empty? do
     puts "What chort does this student belong to?"
     cohort = gets.chomp
-    students << {name: name, cohort: cohort.empty? ? "permanent" : cohort }
-    puts "Now we have #{students.count} students"
+    students << {name: name, cohort: cohort.empty? ? :permanent : cohort.to_sym }
+    if students.count == 1
+      puts "Now we have 1 student"
+    else
+      puts "Now we have #{students.count} students"
+    end
     name = gets.chomp
   end
   students
@@ -19,6 +23,7 @@ def print_header
 end
 
 def print(students)
+  students.sort_by! { |student| student[:cohort] }
   students.each_with_index do |student, index|
     puts "#{index + 1}. #{student[:name].center(30)} (#{student[:cohort]} cohort)"
   end
