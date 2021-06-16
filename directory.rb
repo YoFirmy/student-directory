@@ -20,6 +20,14 @@ def print_menu
   puts "9. Exit"
 end
 
+def student_count
+  if @students.count == 1
+    puts "Now we have 1 student"
+  else
+    puts "Now we have #{@students.count} students"
+  end
+end
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, leave the name blank and hit return again"
@@ -31,6 +39,22 @@ def input_students
     student_count
     name = STDIN.gets.chomp
   end
+end
+
+def print_header
+  puts "The students of Villains Academy"
+  puts "-------------"
+end
+
+def print_students
+  @students.sort_by! { |student| student[:cohort] }
+  @students.each_with_index do |student, index|
+    puts "#{index + 1}. #{student[:name].center(30)} (#{student[:cohort]} cohort)"
+  end
+end
+
+def print_footer
+  puts "Overall, we have #{@students.count} great students"
 end
 
 def show_students
@@ -47,6 +71,7 @@ def save_students
     file.puts csv_line
   end
   file.close
+  puts "students saved to students.csv"
 end
 
 def load_students(filename = "students.csv")
@@ -56,6 +81,7 @@ def load_students(filename = "students.csv")
     @students << {name: name, cohort: cohort.to_sym}  
   end
   file.close
+  puts "students loaded from #{filename}"
 end
 
 def process(selection)
@@ -81,30 +107,6 @@ def interactive_menu
     selection = STDIN.gets.chomp
     process(selection)
   end
-end
-
-def student_count
-  if @students.count == 1
-    puts "Now we have 1 student"
-  else
-    puts "Now we have #{@students.count} students"
-  end
-end
-
-def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
-end
-
-def print_students
-  @students.sort_by! { |student| student[:cohort] }
-  @students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name].center(30)} (#{student[:cohort]} cohort)"
-  end
-end
-
-def print_footer
-  puts "Overall, we have #{@students.count} great students"
 end
 
 try_load_students
