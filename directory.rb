@@ -1,5 +1,25 @@
 @students = []
 
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry,  #{filename} doesn't exist."
+    exit
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Save the list to students.csv"
+  puts "4. Load the list from students.csv"
+  puts "9. Exit"
+end
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, leave the name blank and hit return again"
@@ -8,13 +28,15 @@ def input_students
     puts "What chort does this student belong to?"
     cohort = STDIN.gets.chomp
     @students << {name: name, cohort: cohort.empty? ? :permanent : cohort.to_sym }
-    if @students.count == 1
-      puts "Now we have 1 student"
-    else
-      puts "Now we have #{@students.count} students"
-    end
+    student_count
     name = STDIN.gets.chomp
   end
+end
+
+def show_students
+  print_header
+  print_students
+  print_footer
 end
 
 def save_students
@@ -34,48 +56,6 @@ def load_students(filename = "students.csv")
     @students << {name: name, cohort: cohort.to_sym}  
   end
   file.close
-end
-
-def try_load_students
-  filename = ARGV.first
-  return if filename.nil?
-  if File.exists?(filename)
-    load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
-  else
-    puts "Sorry,  #{filename} doesn't exist."
-    exit
-  end
-end
-
-def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
-end
-
-def print_students
-  @students.sort_by! { |student| student[:cohort] }
-  @students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name].center(30)} (#{student[:cohort]} cohort)"
-  end
-end
-
-def print_footer
-  puts "Overall, we have #{@students.count} great students"
-end
-
-def print_menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
-  puts "9. Exit"
-end
-
-def show_students
-  print_header
-  print_students
-  print_footer
 end
 
 def process(selection)
@@ -101,6 +81,30 @@ def interactive_menu
     selection = STDIN.gets.chomp
     process(selection)
   end
+end
+
+def student_count
+  if @students.count == 1
+    puts "Now we have 1 student"
+  else
+    puts "Now we have #{@students.count} students"
+  end
+end
+
+def print_header
+  puts "The students of Villains Academy"
+  puts "-------------"
+end
+
+def print_students
+  @students.sort_by! { |student| student[:cohort] }
+  @students.each_with_index do |student, index|
+    puts "#{index + 1}. #{student[:name].center(30)} (#{student[:cohort]} cohort)"
+  end
+end
+
+def print_footer
+  puts "Overall, we have #{@students.count} great students"
 end
 
 try_load_students
