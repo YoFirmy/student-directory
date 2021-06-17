@@ -1,3 +1,5 @@
+require 'csv'
+
 @students = []
 
 def try_load_students
@@ -5,7 +7,7 @@ def try_load_students
   return if filename.nil?
   if File.exists?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+    puts "Loaded #{@students.count} students from #{filename}"
   else
     puts "Sorry,  #{filename} doesn't exist."
     exit
@@ -64,23 +66,19 @@ def show_students
 end
 
 def save_students
-  File.open("students.csv", "w") { |file|
+  CSV.open("students.csv", "w") do |file|
     @students.each do |student|
-      student_data = [student[:name], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      file << [student[:name], student[:cohort]]
     end
-  }
+  end
   puts "students saved to students.csv"
 end
 
 def load_students(filename = "students.csv")
-  File.open(filename, "r") { |file|
-    file.readlines.each do |line|
-      name, cohort = line.chomp.split(',')
-      @students << {name: name, cohort: cohort.to_sym}  
-    end
-  }
+  CSV.foreach(filename) do |line|
+    name, cohort = line
+    @students << {name: name, cohort: cohort.to_sym}
+  end
   puts "students loaded from #{filename}"
 end
 
